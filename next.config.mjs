@@ -8,6 +8,9 @@ const nextConfig = {
   assetPrefix: isGhPages ? '/ostov-cyclework/' : '',
   trailingSlash: isGhPages,
   images: { unoptimized: isGhPages },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGhPages ? '/ostov-cyclework' : ''
+  },
   experimental: {
     optimizePackageImports: ['gsap', 'three']
   }

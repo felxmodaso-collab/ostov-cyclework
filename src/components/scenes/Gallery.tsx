@@ -1,3 +1,4 @@
+import { asset } from '@/lib/asset';
 import Image from 'next/image';
 import { Reveal } from '@/components/Reveal';
 import { TiltCard } from '@/components/TiltCard';
@@ -12,7 +13,7 @@ const frames = [
     owner: 'И. В., Санкт-Петербург',
     use: 'заезды 600 км в Карелии',
     delivered: 'март 2024',
-    img: '/assets/04-frame-sage.png'
+    img: asset('/assets/04-frame-sage.png')
   },
   {
     num: '29',
@@ -22,7 +23,7 @@ const frames = [
     owner: 'А. К., Москва',
     use: 'Париж—Брест—Париж, 1 219 км',
     delivered: 'май 2023',
-    img: '/assets/05-frame-rose.png'
+    img: asset('/assets/05-frame-rose.png')
   },
   {
     num: '31',
@@ -32,7 +33,7 @@ const frames = [
     owner: 'М. С., Петрозаводск',
     use: 'Лондон—Эдинбург—Лондон, 1 540 км',
     delivered: 'август 2022',
-    img: '/assets/06-frame-cream.png'
+    img: asset('/assets/06-frame-cream.png')
   },
   {
     num: '38',
@@ -42,7 +43,7 @@ const frames = [
     owner: 'Д. П., Таллин',
     use: 'каждый день, 15—18 тыс. км в год',
     delivered: 'октябрь 2024',
-    img: '/assets/07-frame-stainless.png'
+    img: asset('/assets/07-frame-stainless.png')
   }
 ];
 
@@ -50,13 +51,13 @@ export function Gallery() {
   return (
     <section className="scene" id="gallery">
       <BlueprintDecor
-        src="/assets/bp-01-frame-top.png"
+        src={asset("/assets/bp-01-frame-top.png")}
         className="top-[4%] -right-[8%] w-[50vw] aspect-[16/9]"
         opacity={0.55}
         rotate={5}
       />
       <BlueprintDecor
-        src="/assets/bp-02-dropout.png"
+        src={asset("/assets/bp-02-dropout.png")}
         className="bottom-[4%] -left-[3%] w-[20vw] aspect-square"
         opacity={0.65}
         rotate={-18}

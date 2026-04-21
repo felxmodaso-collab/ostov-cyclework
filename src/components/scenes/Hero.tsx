@@ -1,4 +1,5 @@
 'use client';
+import { asset } from '@/lib/asset';
 
 import { useEffect, useState } from 'react';
 import { Counter } from '@/components/Counter';
@@ -30,13 +31,13 @@ export function Hero() {
     <section className="relative min-h-screen overflow-hidden" id="hero">
       {/* Blueprint decor — background technical drawings */}
       <BlueprintDecor
-        src="/assets/bp-01-frame-top.png"
+        src={asset("/assets/bp-01-frame-top.png")}
         className="top-[55%] -right-[8%] w-[58vw] aspect-[16/9]"
         opacity={0.7}
         rotate={-6}
       />
       <BlueprintDecor
-        src="/assets/bp-06-fork.png"
+        src={asset("/assets/bp-06-fork.png")}
         className="top-[8%] -left-[4%] w-[22vw] aspect-[3/4]"
         opacity={0.6}
         rotate={-12}

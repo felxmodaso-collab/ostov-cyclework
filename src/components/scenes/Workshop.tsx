@@ -1,4 +1,5 @@
 'use client';
+import { asset } from '@/lib/asset';
 
 import { useState } from 'react';
 import Image from 'next/image';
@@ -52,13 +53,13 @@ export function Workshop() {
   return (
     <SceneHue hue="200, 168, 120" radius={680} className="scene" id="workshop">
       <BlueprintDecor
-        src="/assets/bp-06-fork.png"
+        src={asset("/assets/bp-06-fork.png")}
         className="top-[8%] -right-[3%] w-[22vw] aspect-[3/4]"
         opacity={0.7}
         rotate={12}
       />
       <BlueprintDecor
-        src="/assets/bp-04-bb.png"
+        src={asset("/assets/bp-04-bb.png")}
         className="bottom-[8%] -left-[3%] w-[24vw] aspect-square"
         opacity={0.65}
         rotate={-10}
@@ -160,7 +161,7 @@ export function Workshop() {
               }}
             >
               <Image
-                src="/assets/03-brazing.png"
+                src={asset("/assets/03-brazing.png")}
                 alt="Пайка стального стыка рамы"
                 fill
                 className="object-cover"

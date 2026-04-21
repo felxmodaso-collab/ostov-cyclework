@@ -1,3 +1,4 @@
+import { asset } from '@/lib/asset';
 import Image from 'next/image';
 import { Reveal } from '@/components/Reveal';
 import { Counter } from '@/components/Counter';
@@ -7,13 +8,13 @@ export function FitStudy() {
   return (
     <section className="scene" id="fit-study">
       <BlueprintDecor
-        src="/assets/bp-03-headtube.png"
+        src={asset("/assets/bp-03-headtube.png")}
         className="-top-[3%] -right-[5%] w-[30vw] aspect-[4/5]"
         opacity={0.7}
         rotate={8}
       />
       <BlueprintDecor
-        src="/assets/bp-02-dropout.png"
+        src={asset("/assets/bp-02-dropout.png")}
         className="bottom-[6%] -left-[3%] w-[24vw] aspect-square"
         opacity={0.6}
         rotate={-15}
@@ -167,7 +168,7 @@ export function FitStudy() {
               }}
             >
               <Image
-                src="/assets/01-wireframe-clean.png"
+                src={asset("/assets/01-wireframe-clean.png")}
                 alt="Чертёж геометрии велосипедной рамы"
                 fill
                 className="object-contain p-4"

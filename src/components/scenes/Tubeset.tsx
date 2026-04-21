@@ -1,4 +1,5 @@
 'use client';
+import { asset } from '@/lib/asset';
 
 import { useState } from 'react';
 import Image from 'next/image';
@@ -55,13 +56,13 @@ export function Tubeset() {
   return (
     <section className="scene" id="tubeset">
       <BlueprintDecor
-        src="/assets/bp-05-lug.png"
+        src={asset("/assets/bp-05-lug.png")}
         className="top-[6%] -left-[3%] w-[26vw] aspect-[3/4]"
         opacity={0.7}
         rotate={-8}
       />
       <BlueprintDecor
-        src="/assets/bp-04-bb.png"
+        src={asset("/assets/bp-04-bb.png")}
         className="-bottom-[3%] -right-[3%] w-[28vw] aspect-square"
         opacity={0.65}
         rotate={15}
@@ -108,7 +109,7 @@ export function Tubeset() {
                 }}
               >
                 <Image
-                  src="/assets/02-cross-section-clean.png"
+                  src={asset("/assets/02-cross-section-clean.png")}
                   alt="Разрез трубы с переменной толщиной стенки"
                   fill
                   className="object-contain p-4"

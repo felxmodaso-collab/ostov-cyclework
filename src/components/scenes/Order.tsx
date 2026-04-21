@@ -1,3 +1,4 @@
+import { asset } from '@/lib/asset';
 import { Reveal } from '@/components/Reveal';
 import { BlueprintDecor } from '@/components/BlueprintDecor';
 
@@ -41,13 +42,13 @@ export function Order() {
   return (
     <section className="scene" id="order">
       <BlueprintDecor
-        src="/assets/bp-06-fork.png"
+        src={asset("/assets/bp-06-fork.png")}
         className="top-[6%] -right-[3%] w-[24vw] aspect-[3/4]"
         opacity={0.7}
         rotate={10}
       />
       <BlueprintDecor
-        src="/assets/bp-05-lug.png"
+        src={asset("/assets/bp-05-lug.png")}
         className="bottom-[8%] -left-[3%] w-[22vw] aspect-[3/4]"
         opacity={0.6}
         rotate={-12}
