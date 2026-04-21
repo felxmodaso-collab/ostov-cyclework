@@ -6,3 +6,4 @@ screenshots/
 .env.local
 .DS_Store
 *.log
+_check*
