@@ -1,0 +1,296 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #141824;
+  --bg-deep: #0e1119;
+  --fg-cream: #e6dcc2;
+  --fg-cream-dim: #c9c0a8;
+  --fg-steel: #7a8599;
+  --accent-light: #9fa8da;
+  --accent-anchor: #d4a5a5;
+  --accent-amber: #c8a878;
+
+  --cx: 50%;
+  --cy: 50%;
+  --light-radius: 560px;
+  --light-hue: 159, 168, 218;
+  --veil-strength: 0.88;
+
+  --scroll: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bg-base);
+  color-scheme: dark;
+}
+
+body {
+  position: relative;
+  background: var(--bg-base);
+  color: var(--fg-cream);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 15px;
+  line-height: 1.55;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- CRAFT BACKGROUND LAYERS ---- */
+
+/* Layer 1: Blueprint grid — subtle 72px reticle, periwinkle whisper */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(159, 168, 218, 1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159, 168, 218, 1) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: 0 0;
+  opacity: 0.028;
+  mix-blend-mode: screen;
+}
+
+/* Layer 2: Paper grain — procedural SVG noise, baked into bg */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.86  0 0 0 0 0.76  0 0 0 0.45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 260px 260px;
+  opacity: 0.11;
+  mix-blend-mode: overlay;
+}
+
+/* Layer 3: Ambient washes — cool top-left + warm bottom-right,
+   creates depth without being obvious */
+.ambient-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 60vw 70vh at 15% 10%,
+      rgba(159, 168, 218, 0.07) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 70vw 80vh at 90% 95%,
+      rgba(200, 168, 120, 0.055) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 40vw 50vh at 60% 50%,
+      rgba(212, 165, 165, 0.025) 0%,
+      transparent 70%
+    );
+}
+
+/* Ensure content sits above background layers */
+main {
+  position: relative;
+  z-index: 10;
+}
+
+footer {
+  position: relative;
+  z-index: 10;
+}
+
+/* Letterpress shadow */
+.letterpress {
+  text-shadow:
+    3px 3px 0 rgba(200, 168, 120, 0.22),
+    6px 6px 0 rgba(200, 168, 120, 0.09),
+    9px 9px 0 rgba(200, 168, 120, 0.03);
+}
+
+/* Veil: dark overlay that reveals content inside cursor-light radius */
+.veil-dark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  background: radial-gradient(
+    circle var(--light-radius) at var(--cx) var(--cy),
+    transparent 0%,
+    transparent 28%,
+    rgba(20, 24, 36, 0.2) 52%,
+    rgba(18, 22, 32, 0.55) 76%,
+    rgba(14, 17, 25, var(--veil-strength)) 100%
+  );
+  transition: background 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.veil-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 31;
+  background: radial-gradient(
+    circle calc(var(--light-radius) * 1.1) at var(--cx) var(--cy),
+    rgba(var(--light-hue), 0.14) 0%,
+    rgba(var(--light-hue), 0.08) 35%,
+    rgba(var(--light-hue), 0.04) 60%,
+    transparent 85%
+  );
+  mix-blend-mode: screen;
+  transition: background 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-anchor);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .veil-dark,
+  .veil-glow {
+    display: none;
+  }
+}
+
+html[data-unveiled] .veil-dark,
+html[data-unveiled] .veil-glow {
+  display: none !important;
+}
+
+::selection {
+  background: rgba(212, 165, 165, 0.35);
+  color: var(--fg-cream);
+}
+
+/* Reveal link */
+.reveal-link {
+  position: relative;
+  color: var(--accent-anchor);
+  text-decoration: none;
+  padding-bottom: 0.25rem;
+  display: inline-block;
+}
+
+.reveal-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent-anchor);
+  transform-origin: right center;
+  transform: scaleX(0.35);
+  opacity: 0.45;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-link:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+  transform-origin: left center;
+}
+
+/* Scene base */
+.scene {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+@media (min-width: 768px) {
+  .scene {
+    padding: 5rem 3rem;
+  }
+}
+
+/* Ensure scene content sits above the blueprint decor (z:0) */
+.scene > *:not(.blueprint-decor) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Pulse for live indicators */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-anchor);
+  display: inline-block;
+  animation: pulse-soft 2.8s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(212, 165, 165, 0.4);
+}
+
+/* Scan line */
+@keyframes scan-sweep {
+  0% { transform: translateX(-100%); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.scan-line {
+  animation: scan-sweep 6s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  animation-delay: 1.5s;
+}
+
+/* Tilt cards */
+.tilt-scene {
+  perspective: 1200px;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* Hairline divider with gradient ends */
+.hair {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(122, 133, 153, 0.35) 20%,
+    rgba(122, 133, 153, 0.35) 80%,
+    transparent
+  );
+}
+
+/* Tiny stamp marks — faux worn corner */
+.stamp {
+  position: relative;
+  font-feature-settings: 'ss01';
+}
+
+.stamp::before {
+  content: '';
+  position: absolute;
+  inset: -0.35em -0.5em;
+  border: 1px solid currentColor;
+  opacity: 0.3;
+  border-radius: 2px;
+  transform: rotate(-0.6deg);
+  pointer-events: none;
+}
