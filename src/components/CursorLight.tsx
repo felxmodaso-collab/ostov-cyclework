@@ -38,11 +38,13 @@ export function CursorLight() {
     let introActive = true;
     let cursorSeen = false;
     const cursorPos = { x: 0.5, y: 0.32 };
-    // start off-screen bottom-left so the sweep is visibly large
-    target.current.x = -0.15;
-    target.current.y = 1.1;
-    current.current.x = -0.15;
-    current.current.y = 1.1;
+    // Start in-viewport so the dark veil has a visible hole from frame 1
+    // (off-screen start makes the whole screen go black until the spiral
+    // wraps back inside).
+    target.current.x = 0.2;
+    target.current.y = 0.78;
+    current.current.x = 0.2;
+    current.current.y = 0.78;
 
     const onMove = (e: PointerEvent) => {
       if (isTouch) return;
@@ -83,10 +85,14 @@ export function CursorLight() {
           const p = raw;
           const cx = cursorSeen ? cursorPos.x : 0.5;
           const cy = cursorSeen ? cursorPos.y : 0.32;
-          const amp = (1 - p) * (1 - p) * 0.65; // quadratic decay, bigger start
-          const phase = p * Math.PI * 3.0;
-          target.current.x = cx + amp * Math.cos(phase);
-          target.current.y = cy + amp * 0.75 * Math.sin(phase * 1.35);
+          // Wide but always in-viewport: clamp spiral so the light hole
+          // never crosses the screen edge by more than 10%.
+          const amp = (1 - p) * 0.48;
+          const phase = p * Math.PI * 2.8;
+          const nx = cx + amp * Math.cos(phase);
+          const ny = cy + amp * 0.8 * Math.sin(phase * 1.35);
+          target.current.x = Math.max(-0.1, Math.min(1.1, nx));
+          target.current.y = Math.max(-0.1, Math.min(1.1, ny));
         }
       }
 
