@@ -29,21 +29,30 @@ export function CursorLight() {
     const isTouch = window.matchMedia('(hover: none)').matches;
     const root = document.documentElement;
 
-    // Intro ("fairy") phase — auto-animate spotlight for ~1.8s, land on hero title,
-    // then hand off to real cursor on first pointer move.
+    // Intro ("fairy") phase — sweeping spiral that tracks the cursor and
+    // lands on it. Does NOT cancel on pointermove; instead, the spiral's
+    // center follows the cursor continuously, so wherever the user's pointer
+    // is (or moves to) during the 2s intro, the light converges to it.
     const introStart = performance.now();
-    const introDuration = 1800;
+    const introDuration = 2000;
     let introActive = true;
-    target.current.x = 0.18;
-    target.current.y = 0.22;
-    current.current.x = 0.18;
-    current.current.y = 0.22;
+    let cursorSeen = false;
+    const cursorPos = { x: 0.5, y: 0.32 };
+    // start off-screen bottom-left so the sweep is visibly large
+    target.current.x = -0.15;
+    target.current.y = 1.1;
+    current.current.x = -0.15;
+    current.current.y = 1.1;
 
     const onMove = (e: PointerEvent) => {
       if (isTouch) return;
-      introActive = false;
-      target.current.x = e.clientX / window.innerWidth;
-      target.current.y = e.clientY / window.innerHeight;
+      cursorSeen = true;
+      cursorPos.x = e.clientX / window.innerWidth;
+      cursorPos.y = e.clientY / window.innerHeight;
+      if (!introActive) {
+        target.current.x = cursorPos.x;
+        target.current.y = cursorPos.y;
+      }
     };
 
     const onLeave = () => {
@@ -66,19 +75,22 @@ export function CursorLight() {
         const raw = (now - introStart) / introDuration;
         if (raw >= 1) {
           introActive = false;
-          target.current.x = 0.5;
-          target.current.y = 0.32;
+          target.current.x = cursorSeen ? cursorPos.x : 0.5;
+          target.current.y = cursorSeen ? cursorPos.y : 0.32;
         } else {
-          // decaying spiral, settles at hero title (0.5, 0.32)
+          // Decaying spiral centered on the live cursor (or default hero
+          // landing if cursor never entered). Wider sweep and more turns.
           const p = raw;
-          const amp = (1 - p) * 0.34;
-          const phase = p * Math.PI * 2.2;
-          target.current.x = 0.5 + amp * Math.cos(phase);
-          target.current.y = 0.32 + amp * 0.7 * Math.sin(phase * 1.3);
+          const cx = cursorSeen ? cursorPos.x : 0.5;
+          const cy = cursorSeen ? cursorPos.y : 0.32;
+          const amp = (1 - p) * (1 - p) * 0.65; // quadratic decay, bigger start
+          const phase = p * Math.PI * 3.0;
+          target.current.x = cx + amp * Math.cos(phase);
+          target.current.y = cy + amp * 0.75 * Math.sin(phase * 1.35);
         }
       }
 
-      const lerp = introActive ? 0.22 : 0.14;
+      const lerp = introActive ? 0.18 : 0.14;
       current.current.x += (target.current.x - current.current.x) * lerp;
       current.current.y += (target.current.y - current.current.y) * lerp;
 
